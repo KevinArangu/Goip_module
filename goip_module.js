@@ -1,4 +1,4 @@
-//Modulo de sarrollado por: Kevin Arangu
+//Modulo desarrollado por: Kevin Arangu
 
 require("isomorphic-fetch")
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
@@ -51,7 +51,7 @@ const postByHttp = (num, msg, line=1) => {
 }
 
 
-
+// IN PROCESS, NOT USE
 const sendByFetch = async () => {
     const header = new Headers();
     header.append("Content-type", "application/x-www-form-urlencoded");
