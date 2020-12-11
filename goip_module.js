@@ -1,7 +1,7 @@
 //Modulo de sarrollado por: Kevin Arangu
 
 require("isomorphic-fetch")
-require("xmlhttprequest").XMLHttpRequest
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 
 const url = 'http://192.168.0.15/default/en_US/sms_info.html';
 const username = 'xxxxx';
