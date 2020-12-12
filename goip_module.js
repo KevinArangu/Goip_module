@@ -8,6 +8,7 @@ const username = 'xxxxx';
 const password = 'xxxxx';
 const asyncr = true;
 const syncr = false;
+
 const post = {
     method: 'POST',
     body: {},
@@ -23,15 +24,41 @@ const randomString = (length=8) => {
     return Math.random().toString(20).substr(2, length);
 }
 const generateParameters = (num, msg, line=1) => {
-    const smsKey = randomString();
+    //const smsKey = randomString();
+    const tlf = num.replace(/ /g, "");
+    const smsKey="5fd36a4a";
     const smsContent = msg.replace(/ /g, "+");
-    const parameter = `line2=${line}&smskey=${smsKey}&action=SMS&telnum=${num}&smscontent=${smsContent}&send=Send`;
-    return parameter;
+    const parameters = `line2=${line}&smskey=${smsKey}&action=SMS&telnum=${tlf}&smscontent=${smsContent}&send=Send`;
+    return parameters;
+}
+
+
+const getByHttp = (parameters, urls, addrandomnumber=1) => {
+    const request = new XMLHttpRequest();
+    if (addrandomnumber==1) {
+        var parameters=parameters+"&ajaxcachebust="+new Date().getTime()
+    }
+    if (request){
+        request.onreadystatechange = () => {
+            if (request.readyState == 4) {
+                if(request.status == 200){
+                    console.log(request.responseText);
+                }
+                else{
+                    console.log("Error loading page\n");
+                    console.log(request);
+                }
+            }
+        };
+        request.open('GET', url+"?"+parameters, true)
+        request.send(null)
+    }
+    return request
 }
 
 const postByHttp = (num, msg, line=1) => {
     const request = new XMLHttpRequest();
-    const parameters = generateParameters(num, msg, line);
+    const parameters = generateParameters(num, msg, line=1);
     request.open("POST", url, asyncr);
     request.onreadystatechange = function (aEvt) {
         if (request.readyState == 4) {
@@ -60,7 +87,7 @@ const sendByFetch = async () => {
 }
 
 module.exports = {
-    postByHttp
+    getByHttp, postByHttp, generateParameters,
 
 }
 

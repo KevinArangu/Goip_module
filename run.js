@@ -1,8 +1,11 @@
 const goip = require("./goip_module")
 
 const main = async () => {
-    const request = await goip.postByHttp("04149513409", "esto es un sms");
+
+    const parameters = goip.generateParameters("04149513409", "prueba de texto");
+    const request = await goip.getByHttp(parameters);
     console.log(request);
+
 }; main();
 
 // const rand = goip.getRandom();
