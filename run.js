@@ -2,9 +2,15 @@ const goip = require("./goip_module")
 
 const main = async () => {
 
+    const logear = () => {
+        const user = goip.logIn("http://192.168.0.15/default/en_US/status.html", "admin", "admin");
+        console.log(user);
+    }
     const parameters = goip.generateParameters("04149513409", "prueba de texto");
-    const request = await goip.getByHttp(parameters);
-    console.log(request);
+    const request = goip.getLogin("http://192.168.0.15/default/en_US/status.html");
+    (request.status===401)?logear():null;
+
+
 
 }; main();
 

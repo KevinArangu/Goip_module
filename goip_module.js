@@ -3,7 +3,8 @@
 require("isomorphic-fetch")
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 
-const url = 'http://192.168.0.15/default/en_US/sms_info.html';
+const urlsms = 'http://192.168.0.15/default/en_US/sms_info.html';
+const urllogin = "http://192.168.0.15/default/en_US/status.html";
 const username = 'xxxxx';
 const password = 'xxxxx';
 const asyncr = true;
@@ -31,49 +32,85 @@ const generateParameters = (num, msg, line=1) => {
     const parameters = `line2=${line}&smskey=${smsKey}&action=SMS&telnum=${tlf}&smscontent=${smsContent}&send=Send`;
     return parameters;
 }
-
-
-const getByHttp = (parameters, urls, addrandomnumber=1) => {
+const getLogin =  (urls) => {
+    const request = new XMLHttpRequest()
+    request.open('GET', urls, false)
+    request.onreadystatechange = () => {
+        if (request.readyState == 4) {
+            if(request.status == 200){
+                console.log(request.responseText);
+            }
+            if(request.status == 401){
+                console.log("Please Authenticate");
+            }
+            else{
+                console.log("Error loading page");
+            }
+        }
+    };
+    request.send(null)
+    return request
+}
+const logIn =  (urls, user, pass) => {
+    const request = new XMLHttpRequest()
+    request.open('GET', urls, false, user, pass)
+    request.onreadystatechange = () => {
+        if (request.readyState == 4) {
+            if(request.status == 200){
+                console.log(request.responseText);
+            }
+            if(request.status == 401){
+                console.log("Please Authenticate");
+            }
+            else{
+                console.log("Error loading page");
+            }
+        }
+    };
+    request.send(null)
+    return request
+}
+const getByHttp = (urls, parameters, addrandomnumber=1) => {
     const request = new XMLHttpRequest();
     if (addrandomnumber==1) {
         var parameters=parameters+"&ajaxcachebust="+new Date().getTime()
     }
     if (request){
-        request.onreadystatechange = () => {
-            if (request.readyState == 4) {
-                if(request.status == 200){
-                    console.log(request.responseText);
+            request.onreadystatechange = () => {
+                if (request.readyState == 4) {
+                    if(request.status == 200){
+                        console.log(request.responseText);
+                    }
+                    else{
+                        console.log("Error loading page\n");
+                        console.log(request);
+                    }
                 }
-                else{
-                    console.log("Error loading page\n");
-                    console.log(request);
-                }
-            }
-        };
-        request.open('GET', url+"?"+parameters, true)
-        request.send(null)
+            };
+            request.open('GET', urls+"?"+parameters, true)
+            request.send(null)
     }
     return request
 }
-
-const postByHttp = (num, msg, line=1) => {
+const postByHttp = (parameters, urls) => {
     const request = new XMLHttpRequest();
-    const parameters = generateParameters(num, msg, line=1);
-    request.open("POST", url, asyncr);
-    request.onreadystatechange = function (aEvt) {
-        if (request.readyState == 4) {
-            if(request.status == 200){
-                console.log(request.responseText);
-            }
-            else{
-                console.log("Error loading page\n");
-                console.log(request);
-            }
-        }
+    if(request){
+        request.open("POST", urls, asyncr);
+        request.onreadystatechange = () => {
+            if (request.readyState == 4) {
+                if(request.status == 200) {
+                    console.log(request.responseText);
+                }
+                else {
+                    console.log("Error loading page\n");
+                    console.log(request);
+                };
+            };
+        };
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        //request.setRequestHeader("Authorization", "Basic YWRtaW46YWRtaW4="); //Authorization: Basic YWRtaW46YWRtaW4=
+        request.send(parameters);
     };
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    request.setRequestHeader("Authorization", "Basic YWRtaW46YWRtaW4="); //Authorization: Basic YWRtaW46YWRtaW4=
-    request.send(parameters);
     return request;
 }
 
@@ -87,7 +124,7 @@ const sendByFetch = async () => {
 }
 
 module.exports = {
-    getByHttp, postByHttp, generateParameters,
+    getByHttp, postByHttp, generateParameters, getLogin, logIn,
 
 }
 
