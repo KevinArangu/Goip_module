@@ -7,9 +7,11 @@ const main = async () => {
         console.log(user);
     }
     const parameters = goip.generateParameters("04149513409", "prueba de texto");
-    const request = goip.getLogin("http://192.168.0.15/default/en_US/status.html");
-    (request.status===401)?logear():null;
-
+    // const request = goip.getLogin("http://192.168.0.15/default/en_US/status.html");
+    // (request.status===401)?logear():null;
+    // const request2 = goip.getLogin("http://192.168.0.15/default/en_US/status.html");
+    
+    const msg = goip.postByHttp(parameters, "admin", "admin")
 
 
 }; main();

@@ -7,16 +7,6 @@ const urlsms = 'http://192.168.0.15/default/en_US/sms_info.html';
 const urllogin = "http://192.168.0.15/default/en_US/status.html";
 const username = 'xxxxx';
 const password = 'xxxxx';
-const asyncr = true;
-const syncr = false;
-
-const post = {
-    method: 'POST',
-    body: {},
-    headers: {
-        'Content-Type':'application/x-www-form-urlencoded',
-    }
-};
 
 const getRandom = (min=100000, max=999999) => {
     return parseInt(Math.random() * (max - min) + min);
@@ -92,14 +82,14 @@ const getByHttp = (urls, parameters, addrandomnumber=1) => {
     }
     return request
 }
-const postByHttp = (parameters, urls) => {
+const postByHttp = (parameters, user, pass) => {
     const request = new XMLHttpRequest();
     if(request){
-        request.open("POST", urls, asyncr);
+        request.open("POST", urlsms, false, user, pass);
         request.onreadystatechange = () => {
             if (request.readyState == 4) {
                 if(request.status == 200) {
-                    console.log(request.responseText);
+                    console.log(request.status);
                 }
                 else {
                     console.log("Error loading page\n");
@@ -114,14 +104,6 @@ const postByHttp = (parameters, urls) => {
     return request;
 }
 
-
-// IN PROCESS, NOT USE
-const sendByFetch = async () => {
-    const header = new Headers();
-    header.append("Content-type", "application/x-www-form-urlencoded");
-
-    const request = await fetch()
-}
 
 module.exports = {
     getByHttp, postByHttp, generateParameters, getLogin, logIn,
